@@ -6,6 +6,7 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { signIn } from '@/auth';
 import { AuthError } from 'next-auth';
+import axios from 'axios'
 
 const FormSchema = z.object({
   id: z.string(),
@@ -92,6 +93,22 @@ export async function updateInvoice(id: string, formData: FormData) {
       return { message: 'Deleted Invoice.' };
     } catch (error) {
       return { message: 'Database Error: Failed to Delete Invoice.' };
+    }
+  }
+
+  export async function addToCart(id:number){
+    const apiName = `${process.env.BASE_URL}/invoices/addInvoice.php`
+    const {data} = await axios.post( apiName, {
+      id:id
+    }, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+    if(data!=="suc"){
+      return {
+            message: 'Database Error: Failed to Create Invoice.',
+          };
     }
   }
 

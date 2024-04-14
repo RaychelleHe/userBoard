@@ -2,7 +2,7 @@
   "private": true,
   "scripts": {
     "build": "next build",
-    "dev": "next dev",
+    "dev": "next dev -p 3002",
     "prettier": "prettier --write --ignore-unknown .",
     "prettier:check": "prettier --check --ignore-unknown .",
     "start": "next start",
@@ -32,6 +32,7 @@
     "@types/react": "^18.2.74",
     "@types/react-dom": "18.2.14",
     "@vercel/style-guide": "^5.0.1",
+    "daisyui": "^4.10.1",
     "dotenv": "^16.3.1",
     "eslint": "^8.52.0",
     "eslint-config-next": "^14.0.0",
