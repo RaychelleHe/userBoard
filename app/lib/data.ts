@@ -230,3 +230,101 @@ export async function getUser(email: string) {
     throw new Error('Failed to fetch user.');
   }
 }
+
+
+export async function getCartGoods( customer_id : string) {
+  // var cartGoods = (await axios.get("http://localhost:3000/cartGood/readCartGood.php")).data
+
+const PATH = 'http://localhost:3000/cartGood/readCartGood.php';
+  try {
+    // 发送GET请求并传递customer_id作为参数
+    const response = await axios.get(PATH, {
+      params: { customer_id },
+      headers: { 'content-type': 'application/json' },
+    });
+    // 将响应数据转换为数组
+    const cartGoods = (response.data);
+    return cartGoods
+  } catch (e) {
+    console.error("Error fetching cart goods:", e);
+    throw e; // 抛出错误，以便调用者可以处理
+  }
+}
+
+// 更新购物车商品数量
+export async function editCartGoods(customer_id: string, name: string, amount: number) {
+  const PATH = 'http://localhost:3000/cartGood/editCartGood.php'; 
+  try {
+    const response = await axios.post(PATH, {
+      customer_id:customer_id,
+      name:name,
+      amount:amount,
+    }, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      } 
+    });
+
+    if (response.status === 200) {
+      const updatedCartGoods = response.data;
+      console.log('Cart goods updated successfully:', updatedCartGoods);
+      return updatedCartGoods;
+    } else {
+      throw new Error(`Server responded with status code: ${response.status}`);
+    }
+  } catch (error) {
+    console.error("Error updating cart goods:", error);
+    throw error;
+  }
+}
+
+// 加入购物车的函数
+export async function addOrderGoods(cartGoods_id) {
+  const PATH = 'http://localhost:3000/orders/addOrder.php'; 
+  try {
+    const response = await axios.post(PATH, {
+      cartGoods_id:cartGoods_id,
+    }, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      } 
+    });
+
+    if (response.status === 200) {
+      const updatedCartGoods = response.data;
+      console.log('Add order successfully:', updatedCartGoods);
+      return updatedCartGoods;
+    } else {
+      throw new Error(`Server responded with status code: ${response.status}`);
+    }
+  } catch (error) {
+    console.error("Error add order goods:", error);
+    throw error;
+  }
+};
+
+
+// 提交选中商品的函数
+export async function addOrderGoods(cartGoods_id) {
+  const PATH = 'http://localhost:3000/orders/addOrder.php'; 
+  try {
+    const response = await axios.post(PATH, {
+      cartGoods_id:cartGoods_id,
+    }, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      } 
+    });
+
+    if (response.status === 200) {
+      const updatedCartGoods = response.data;
+      console.log('Add order successfully:', updatedCartGoods);
+      return updatedCartGoods;
+    } else {
+      throw new Error(`Server responded with status code: ${response.status}`);
+    }
+  } catch (error) {
+    console.error("Error add order goods:", error);
+    throw error;
+  }
+};
