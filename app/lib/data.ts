@@ -252,12 +252,12 @@ const PATH = 'http://localhost:3000/cartGood/readCartGood.php';
 }
 
 // 更新购物车商品数量
-export async function editCartGoods(customer_id: string, name: string, amount: number) {
+export async function editCartGoods(customer_id: string, id: string, amount: number) {
   const PATH = 'http://localhost:3000/cartGood/editCartGood.php'; 
   try {
     const response = await axios.post(PATH, {
       customer_id:customer_id,
-      name:name,
+      id:id,
       amount:amount,
     }, {
       headers: {
@@ -303,6 +303,30 @@ export async function addOrderGoods(cartGoods_id) {
   }
 };
 
+// 删除购物车商品
+export async function deleteCartGoods(id: string) {
+  const PATH = 'http://localhost:3000/cartGood/deleteCartGood.php'; 
+  try {
+    const response = await axios.post(PATH, {
+      id:id
+    }, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      } 
+    });
+
+    if (response.status === 200) {
+      const updatedCartGoods = response.data;
+      console.log('Cart goods delete successfully:', updatedCartGoods);
+      return updatedCartGoods;
+    } else {
+      throw new Error(`Server responded with status code: ${response.status}`);
+    }
+  } catch (error) {
+    console.error("Error delete cart goods:", error);
+    throw error;
+  }
+}
 
 // 提交选中商品的函数
 export async function addOrderGoods(cartGoods_id) {

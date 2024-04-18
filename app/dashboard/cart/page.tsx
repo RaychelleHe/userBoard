@@ -2,15 +2,9 @@
 
 import React, { useState, useEffect } from "react";
 import { CurrencyYenIcon } from "@heroicons/react/24/outline";
-import { getCartGoods , editCartGoods, addOrderGoods} from "@/app/lib/data";
-
-import { number } from "zod";
-
+import { getCartGoods , editCartGoods, addOrderGoods, deleteCartGoods} from "@/app/lib/data";
 
 export default function Page() {
-    // const cartGoods = getCartGoods('410544b2-4001-4271-9855-fec4b6a6442a')
-
-
     // 假设getCartGoods是一个异步函数，返回一个Promise，该Promise解析为包含商品信息的数组
     const [cartGoods, setCartGoods] = React.useState<{ id: number; customer_id: string; name: string; price: number; amount: number }[]>([]);
     const [loading, setLoading] = React.useState<boolean>(true);
@@ -41,16 +35,12 @@ export default function Page() {
         }, 1000);
     };
     // 修改购物车商品数量
-    const handleEditCartGoods = (customer_id, name) => async () => {
+    const handleEditCartGoods = (customer_id, id) => async () => {
         const currentCartGood = cartGoods.find(good => good.customer_id === customer_id);
         if (currentCartGood) {
             try {
-                const updatedCartGoods = await editCartGoods(customer_id, name, currentCartGood.amount);
-                // setSuccessEditMessage('Cart goods updated successfully'); // 设置成功消息
+                const updatedCartGoods = await editCartGoods(customer_id, id, currentCartGood.amount);
                 showSuccessNotification('Cart goods updated successfully'); // 显示成功消息
-                // setCartGoods(prevCartGoods => {
-                //     return updatedCartGoods;
-                // });
             } catch (error) {
                 console.error("Error updating cart goods:", error);
             }
@@ -98,10 +88,6 @@ export default function Page() {
 
     return (
         <div>
-            {/* <form onSubmit={(e1) => {
-                                    e1.preventDefault();
-                                    addOrderGoods(cartGood.customer_id, cartGood.name, cartGood.amount, cartGood.total_price)();
-                                }}> */}
 
             <table className="table">
                 <thead>
@@ -123,7 +109,7 @@ export default function Page() {
                             <td>
                                 <form onSubmit={(e) => {
                                     e.preventDefault();
-                                    handleEditCartGoods(cartGood.customer_id, cartGood.name)();
+                                    handleEditCartGoods(cartGood.customer_id, cartGood.id)();
                                 }}>
                                     <td>
                                     <input
@@ -145,6 +131,19 @@ export default function Page() {
                                     </button>
                                     </td>
                                     
+                                    <td>
+                                    <button 
+                                    onClick={() => {
+                                        deleteCartGoods(cartGood.id); // 删除商品
+                                        window.location.reload(); // 添加这行代码来刷新页面
+                                        showSuccessNotification('Delete order successfully'); // 显示成功消息
+                                    }}
+                                    
+                                    className="btn btn-secondary" type="submit">
+                                    Delete
+                                    </button>
+                                    </td>
+
                                 </form>
                             
                             </td>
