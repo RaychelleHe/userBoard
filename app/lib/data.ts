@@ -1,4 +1,7 @@
 import { sql } from '@vercel/postgres';
+import axios from "axios";
+import React, { useState } from 'react';
+
 import {
   CustomerField,
   CustomersTableType,
@@ -231,7 +234,6 @@ export async function getUser(email: string) {
   }
 }
 
-
 export async function getCartGoods( customer_id : string) {
   // var cartGoods = (await axios.get("http://localhost:3000/cartGood/readCartGood.php")).data
 
@@ -278,31 +280,6 @@ export async function editCartGoods(customer_id: string, id: string, amount: num
   }
 }
 
-// 加入购物车的函数
-export async function addOrderGoods(cartGoods_id) {
-  const PATH = 'http://localhost:3000/orders/addOrder.php'; 
-  try {
-    const response = await axios.post(PATH, {
-      cartGoods_id:cartGoods_id,
-    }, {
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      } 
-    });
-
-    if (response.status === 200) {
-      const updatedCartGoods = response.data;
-      console.log('Add order successfully:', updatedCartGoods);
-      return updatedCartGoods;
-    } else {
-      throw new Error(`Server responded with status code: ${response.status}`);
-    }
-  } catch (error) {
-    console.error("Error add order goods:", error);
-    throw error;
-  }
-};
-
 // 删除购物车商品
 export async function deleteCartGoods(id: string) {
   const PATH = 'http://localhost:3000/cartGood/deleteCartGood.php'; 
@@ -328,12 +305,39 @@ export async function deleteCartGoods(id: string) {
   }
 }
 
+
 // 提交选中商品的函数
 export async function addOrderGoods(cartGoods_id) {
   const PATH = 'http://localhost:3000/orders/addOrder.php'; 
   try {
     const response = await axios.post(PATH, {
       cartGoods_id:cartGoods_id,
+    }, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      } 
+    });
+
+    if (response.status === 200) {
+      const updatedCartGoods = response.data;
+      console.log('Add order successfully:', updatedCartGoods);
+      return updatedCartGoods;
+    } else {
+      throw new Error(`Server responded with status code: ${response.status}`);
+    }
+  } catch (error) {
+    console.error("Error add order goods:", error);
+    throw error;
+  }
+};
+
+// 提交选中商品的函数
+export async function addCartGoods(customer_id, goods_id) {
+  const PATH = 'http://localhost:3000/orders/addCartGood.php'; 
+  try {
+    const response = await axios.post(PATH, {
+      customer_id:customer_id,
+      goods_id:goods_id
     }, {
       headers: {
         'Content-Type': 'multipart/form-data'
